@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="category/layout::head"></head>
+<body>
+<h1>Danh sách danh mục</h1>
+</div>
+<form th:action="@{/categories/list}">
+    <div class="col">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <input type="text" class=" me-md-2" placeholder="Search" name="name">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </div>
+</form>
+<p>
+    <a th:href="@{/categories/create}">Tạo mới danh muc</a>
+</p>
+<table id="products">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View</th>
+    </tr>
+    <tr th:each="category : ${categories}">
+        <td th:text="${category.id}"></td>
+        <td><a th:href="@{/categories/viewByCategory/__${category.id}__}" th:text="${category.name}"></a></td>
+        <td><a th:href="@{/categories/edit/__${category.id}__}">Update</a></td>
+        <td><a th:href="@{/categories/delete/__${category.id}__}">Delete</a></td>
+        <td><a th:href="@{/categories/view/__${category.id}__}">View</a></td>
+    </tr>
+</table>
+<footer th:replace="category/layout::footer"></footer>
+</body>
+</html>
+
+

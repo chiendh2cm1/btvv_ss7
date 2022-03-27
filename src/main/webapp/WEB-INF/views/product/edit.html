@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="product/layout :: head"></head>
+<body>
+<h3>Edit Product</h3>
+<p>
+    <a th:href="@{/products/list}">
+        Back list
+    </a>
+</p>
+<div id="form">
+    <form th:object="${product}" enctype="multipart/form-data"
+          method="post" novalidate="novalidate">
+        <input type="hidden" th:field="*{id}"/>
+        <div>
+            <label>Name</label>
+            <input type="text" th:field="*{name}"/>
+        </div>
+        <div>
+            <label>Price</label>
+            <input type="email" th:field="*{price}"/>
+        </div>
+        <div>
+            <label>Description</label>
+            <input type="text" th:field="*{description}"/>
+        </div>
+        <div>
+            <label>Image</label>
+            <td><img th:src="@{/image/__${product.image}__}" alt="ảnh sản phẩm" height="100"></td>
+            <input type="file" th:field="*{image}">
+        </div>
+        <div>
+            <label>Category</label>
+            <input type="text" th:field="*{category.name}" disabled>
+        </div>
+        <div>
+            <select id="category" th:field="*{category}">
+                <option th:each="category: ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Edit"/>
+        </div>
+    </form>
+</div>
+<footer th:replace="product/layout :: footer"></footer>
+</body>
+</html>

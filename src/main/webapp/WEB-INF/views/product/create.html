@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="product/layout :: head">
+</head>
+<h3>Create Product</h3>
+<p>
+    <a th:href="@{/products/list}">
+        Back list
+    </a>
+</p>
+<div id="form">
+    <form th:action="@{/products/create}" th:object="${product}" method="post" enctype="multipart/form-data">
+        <div>
+            <label>Name</label>
+            <input type="text" th:field="*{name}">
+        </div>
+        <div>
+            <label>Price</label>
+            <input type="text" th:field="*{price}">
+        </div>
+        <div>
+            <label>Description</label>
+            <input type="text" th:field="*{description}">
+        </div>
+        <div>
+            <label>Image</label>
+            <input type="file" th:field="*{image}">
+        </div>
+        <div>
+            <label for="category">Category</label>
+            <select id="category" th:field="*{category}">
+                <option th:each="category: ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+        </div>
+        <input type="submit" value="Create">
+    </form>
+</div>
+<body>
+<footer th:replace="products/layout::footer"></footer>
+</body>
+</html>
