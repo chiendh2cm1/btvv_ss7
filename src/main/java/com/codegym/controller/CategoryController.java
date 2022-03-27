@@ -26,7 +26,7 @@ public class CategoryController {
         Page<Category> categories;
         categories = categoryService.findAll(pageable);
         if (name.isPresent()) {
-            categories = categoryService.findAllByNameContaining(name.get(),pageable);
+            categories = categoryService.findAllByNameContaining(name.get(), pageable);
         }
         ModelAndView modelAndView = new ModelAndView("/category/list");
         modelAndView.addObject("categories", categories);
@@ -34,7 +34,7 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/viewByCategory/{id}")
-    public ModelAndView ShowProductByCategoryId(@PathVariable Long id, Pageable pageable){
+    public ModelAndView ShowProductByCategoryId(@PathVariable Long id, Pageable pageable) {
         Page<Product> products;
         products = productService.getProductWithName(id, pageable);
         ModelAndView modelAndView = new ModelAndView("/product/listProductByCategory");
@@ -73,6 +73,23 @@ public class CategoryController {
             return new ModelAndView("/error-404");
         }
         categoryService.deleteCategory(id);
+        return new ModelAndView("redirect:/categories/list");
+    }
+
+    @GetMapping("categories/edit/{id}")
+    public ModelAndView ShowEdiCategory(@PathVariable Long id) {
+        Optional<Category> category = categoryService.findById(id);
+        if (!category.isPresent()) {
+            return new ModelAndView("/error-404");
+        }
+        ModelAndView modelAndView = new ModelAndView("/category/edit");
+        modelAndView.addObject("category", category.get());
+        return modelAndView;
+    }
+
+    @PostMapping("/categories/edit/{id}")
+    public ModelAndView EditCategory(@ModelAttribute Category category) {
+        categoryService.save(category);
         return new ModelAndView("redirect:/categories/list");
     }
 }
