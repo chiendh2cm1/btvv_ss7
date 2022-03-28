@@ -46,15 +46,6 @@ public class ProductController {
         return modelAndView;
     }
 
-    @GetMapping("/products/viewByCategory/{id}")
-    public ModelAndView ShowProductByCategoryId(@PathVariable Long id, Pageable pageable){
-        Page<Product> products;
-        products = productService.getProductWithName(id, pageable);
-        ModelAndView modelAndView = new ModelAndView("/product/listProductByCategory");
-        modelAndView.addObject("products", products);
-        return modelAndView;
-    }
-
     @GetMapping("/products/create")
     public ModelAndView ShowDeleteProduct() {
         ModelAndView modelAndView = new ModelAndView("/product/create");
