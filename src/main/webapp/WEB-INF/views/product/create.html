@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="product/layout :: head">
+    <meta charset="utf-8">
 </head>
 <h3>Create Product</h3>
 <p>
@@ -13,14 +14,17 @@
         <div>
             <label>Name</label>
             <input type="text" th:field="*{name}">
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></p>
         </div>
         <div>
             <label>Price</label>
             <input type="text" th:field="*{price}">
+            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: red"></p>
         </div>
         <div>
             <label>Description</label>
             <input type="text" th:field="*{description}">
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red"></p>
         </div>
         <div>
             <label>Image</label>

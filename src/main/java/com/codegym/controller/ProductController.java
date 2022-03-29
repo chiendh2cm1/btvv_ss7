@@ -12,10 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -35,13 +37,15 @@ public class ProductController {
     }
 
     @GetMapping("/products/list")
-    public ModelAndView ShowList(@RequestParam(name = "name") Optional<String> name,@PageableDefault(value = 10) Pageable pageable) {
+    public ModelAndView ShowList(@RequestParam(name = "name") Optional<String> name, @PageableDefault(value = 5) Pageable pageable) {
         Page<Product> products;
-         products = productService.findAll(pageable);
-        if (name.isPresent()) {
-            products = productService.findAllByNameContaining(name.get(),pageable);
-        }
         ModelAndView modelAndView = new ModelAndView("/product/list");
+        if (!name.isPresent()) {
+            products = productService.findAll(pageable);
+        } else {
+            products = productService.findAllByNameContaining(name.get(), pageable);
+            modelAndView.addObject("name", name.get());
+        }
         modelAndView.addObject("products", products);
         return modelAndView;
     }
@@ -53,8 +57,13 @@ public class ProductController {
         return modelAndView;
     }
 
-    @PostMapping("/products/create")
-    public ModelAndView CreateProduct(@ModelAttribute ProductForm productForm) {
+
+
+    @PostMapping(value = "/products/create", produces = "application/x-www-urlencoded;charset=UTF-8")
+    public ModelAndView CreateProduct(@Valid @ModelAttribute("product") ProductForm productForm, BindingResult bindingResult) {
+        if (bindingResult.hasFieldErrors()){
+            return new ModelAndView("/product/create");
+        }
         String fileName = productForm.getImage().getOriginalFilename();
         Long currenTime = System.currentTimeMillis();
         fileName = currenTime + fileName;
@@ -106,7 +115,7 @@ public class ProductController {
     }
 
     @PostMapping("/products/edit/{id}")
-    public ModelAndView EditProduct(@PathVariable Long id, @ModelAttribute ProductForm productForm) {
+    public ModelAndView EditProduct(@PathVariable Long id, @ModelAttribute("product") ProductForm productForm) {
         Optional<Product> oldProduct = productService.findById(id);
         if (!oldProduct.isPresent()) {
             return new ModelAndView("/error-404");

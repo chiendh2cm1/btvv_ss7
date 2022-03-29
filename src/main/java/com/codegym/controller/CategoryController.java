@@ -22,7 +22,7 @@ public class CategoryController {
     IProductService productService;
 
     @GetMapping("/categories/list")
-    public ModelAndView ShowList(@RequestParam(name = "name") Optional<String> name, @PageableDefault(value = 10) Pageable pageable) {
+    public ModelAndView ShowList(@RequestParam(name = "name") Optional<String> name, @PageableDefault(value = 5) Pageable pageable) {
         Page<Category> categories;
         categories = categoryService.findAll(pageable);
         if (name.isPresent()) {
@@ -34,11 +34,12 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/viewByCategory/{id}")
-    public ModelAndView ShowProductByCategoryId(@PathVariable Long id, Pageable pageable) {
+    public ModelAndView ShowProductByCategoryId(@PathVariable Long id, @PageableDefault(value = 5) Pageable pageable) {
         Page<Product> products;
         products = productService.getProductWithName(id, pageable);
         ModelAndView modelAndView = new ModelAndView("/product/listProductByCategory");
         modelAndView.addObject("products", products);
+        modelAndView.addObject("id",id);
         return modelAndView;
     }
 

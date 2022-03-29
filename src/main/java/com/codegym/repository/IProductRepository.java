@@ -13,6 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface IProductRepository extends PagingAndSortingRepository<Product, Long> {
     Page<Product> findByNameContaining(String name, Pageable pageable);
 
-    @Query(value = "select product.*, category.name from product join category on product.category_id = category.id where category_id = ?1", nativeQuery = true)
+    @Query(value = "select * from product join category on product.category_id = category.id where category_id = ?1", nativeQuery = true)
     Page<Product> getProductWithNameSQL(Long id, Pageable pageable);
 }

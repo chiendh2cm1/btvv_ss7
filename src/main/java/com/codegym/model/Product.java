@@ -1,6 +1,9 @@
 package com.codegym.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Product {
@@ -8,10 +11,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "varchar(50)", nullable = false)
+    @NotEmpty(message = "khong de trong")
+    @Size(min = 5, max = 20, message = "5 den 10 ki tu")
     private String name;
+    @NotNull(message = "khong de null")
     @Column(nullable = false)
     private double price;
     @Column(nullable = false)
+    @NotNull(message = "khong de ")
     private String description;
     @Column(nullable = false)
     private String image;
